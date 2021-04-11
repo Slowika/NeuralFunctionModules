@@ -6,8 +6,16 @@ Official code for the paper [Neural Function Modules with Sparse Arguments: A Dy
 
 ## Getting started
 
-## Contributing 
+```
+$ conda create -n nfm python=3.6.8
+$ conda activate nfm
+$ pip install -r requirements.txt
+```
 
+```
+python sort_of_clevr_generator.py
+python main.py --seed=5 --epochs=150
+```
 ## Citation
 
 ```
