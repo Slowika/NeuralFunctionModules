@@ -13,10 +13,12 @@ $ conda create -n nfm python=3.6.8
 $ conda activate nfm
 $ pip install -r requirements.txt
 ```
-
+### Relational reasoning with new shape-color combinations
 ```
-$ python sort_of_clevr_generator.py
-$ python main.py --seed=5 --epochs=150
+$ cd data
+$ python sort_of_clevr_generator.py --nb_heldout_colors=1
+$ cd ..
+$ python main.py --seed=5 --epochs=150 --experiment_name=sortofclevr_heldoutcolor_1
 ```
 ## Citation
 
