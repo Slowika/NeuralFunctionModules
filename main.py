@@ -32,6 +32,8 @@ parser.add_argument('--resume', type=str,
                     help='resume from model stored')
 parser.add_argument('--experiment_name', type=str, default='test',
                     help='Result folder name')
+parser.add_argument('--dataset_name', type=str, default='sort-of-clevr',
+                    help='Dataset name')
 
 args = parser.parse_args()
 
@@ -69,11 +71,6 @@ input_qst = Variable(input_qst)
 label = Variable(label)
 
 def save_csv(name, folder, statistics, include_stat_names=False):
-    """
-    :param name: Csv file name, needs to include .csv
-    :param folder:
-    :param statistics:
-    """
     csv_file_path = os.path.join(folder, name)
 
     #if include_stat_names:
@@ -131,13 +128,10 @@ def train(epoch, rel, norel):
 
     with tqdm.tqdm(total=len(rel[0]) // bs) as pbar_train:
         for batch_idx in range(len(rel[0]) // bs):
-            print(batch_idx)
             tensor_data(rel, batch_idx)
-            print('train model A')
             accuracy_rel, loss_rel = model.train_(input_img, input_qst, label)
 
             tensor_data(norel, batch_idx)
-            print('train model B')
             accuracy_norel, loss_norel = model.train_(input_img, input_qst, label)
 
             acc_rel.append(accuracy_rel)
@@ -220,7 +214,8 @@ def test(epoch, rel, norel):
 def load_data():
     print('loading data...')
     dirs = './data/sortofclevr/'
-    filename = os.path.join(dirs, 'sort-of-clevr.pickle')
+    filename = os.path.join(dirs, args.dataset_name + '.pickle')
+    print("Dataset: ", filename)
     with open(filename, 'rb') as f:
         train_datasets, test_datasets = pickle.load(f, encoding='latin1')
     rel_train = []
