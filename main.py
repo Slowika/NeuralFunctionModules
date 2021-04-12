@@ -109,6 +109,7 @@ def cvt_data_axis(data):
 
 def train(epoch, rel, norel):
     start_time = time.time()
+    print('about to train: epoch {}'.format(epoch))
     model.train()
 
     if not len(rel[0]) == len(norel[0]):
@@ -130,10 +131,13 @@ def train(epoch, rel, norel):
 
     with tqdm.tqdm(total=len(rel[0]) // bs) as pbar_train:
         for batch_idx in range(len(rel[0]) // bs):
+            print(batch_idx)
             tensor_data(rel, batch_idx)
+            print('train model A')
             accuracy_rel, loss_rel = model.train_(input_img, input_qst, label)
 
             tensor_data(norel, batch_idx)
+            print('train model B')
             accuracy_norel, loss_norel = model.train_(input_img, input_qst, label)
 
             acc_rel.append(accuracy_rel)
@@ -162,6 +166,7 @@ def train(epoch, rel, norel):
     stats['Std_train_loss_nonrel'] = np.std(l_norel)
 
     stats['Elapsed_time'] = finish_time - start_time
+    print(stats)
 
     # print('Epoch {}: Mean training accuracy for rel. questions {}'.format(epoch, np.mean(np.array(acc_rel))))
     # print('Epoch {}: Mean training accuracy for non-rel. questions {}'.format(epoch, np.mean(np.array(acc_norel))))

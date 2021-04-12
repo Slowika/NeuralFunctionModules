@@ -142,7 +142,8 @@ class FCOutputModel(nn.Module):
 class BasicModel(nn.Module):
     def __init__(self, args, name):
         super(BasicModel, self).__init__()
-        self.name=name
+        self.name = name
+        self.args = args
 
     def train_(self, input_img, input_qst, label):
         self.optimizer.zero_grad()
@@ -163,7 +164,7 @@ class BasicModel(nn.Module):
         return accuracy
 
     def save_model(self, epoch):
-        torch.save(self.state_dict(), 'model/epoch_{}_{:02d}.pth'.format(self.name, epoch))
+        torch.save(self.state_dict(), self.args.experiment_name + '/epoch_{}_{:02d}.pth'.format(self.name, epoch))
 
 
 class Preresnet_MLP(BasicModel):
