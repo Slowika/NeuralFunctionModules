@@ -15,8 +15,8 @@ $ pip install -r requirements.txt
 ```
 
 ```
-python sort_of_clevr_generator.py
-python main.py --seed=5 --epochs=150
+$ python sort_of_clevr_generator.py
+$ python main.py --seed=5 --epochs=150
 ```
 ## Citation
 
