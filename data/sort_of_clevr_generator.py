@@ -7,11 +7,12 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Generate Sort-of-ClEVR (https://arxiv.org/abs/1706.01427)')
 parser.add_argument('--train_size', type=int, default=9800)
-parser.add_argument('--test_size', type=int, default=200)
+parser.add_argument('--test_size', type=int, default=2000)
 parser.add_argument('--image_size', type=int, default=75)
 parser.add_argument('--object_size', type=int, default=5)
-parser.add_argument('--nb_questions', type=int, default=10) # 10 relational and 10 non-rel qst per image
-parser.add_argument('--nb_heldout_colors', type=int, default=0) # nr of omitted shape-color combinations
+parser.add_argument('--nb_questions', type=int, default=10)
+parser.add_argument('--nb_heldout_colors', type=int, default=0)
+parser.add_argument('--pickle_name', type=str, default='sort-of-clevr')
 
 args = parser.parse_args()
 
@@ -78,7 +79,7 @@ def build_dataset(left_out_color=0):
     """Non-relational questions"""
     for _ in range(nb_questions):
         question = np.zeros((question_size))
-        color = random.randint(0,5)
+        color = random.randint(0, 5- left_out_color)
         question[color] = 1
         question[6] = 1
         subtype = random.randint(0,2)
@@ -110,7 +111,7 @@ def build_dataset(left_out_color=0):
     """Relational questions"""
     for i in range(nb_questions):
         question = np.zeros((question_size))
-        color = random.randint(0,5)
+        color = random.randint(0, 5 -left_out_color)
         question[color] = 1
         question[7] = 1
         subtype = random.randint(0,2)
@@ -162,7 +163,7 @@ test_datasets = [build_dataset() for _ in range(test_size)]
 print('building train datasets...')
 train_datasets = [build_dataset(left_out_color=args.nb_heldout_colors) for _ in range(train_size)]
 print('saving datasets...')
-filename = os.path.join(dirs,'sort-of-clevr.pickle')
+filename = os.path.join(dirs, args.pickle_name + '.pickle')
 with  open(filename, 'wb') as f:
     pickle.dump((train_datasets, test_datasets), f)
 print('datasets saved at {}'.format(filename))
